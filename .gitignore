@@ -1,1 +1,10 @@
 *.pdf
+
+*test.c
+
+*.txt
+
+*.out
+*.exe
+
+*.gch
