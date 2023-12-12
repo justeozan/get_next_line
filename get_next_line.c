@@ -3,36 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: justo <justo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:41 by justo             #+#    #+#             */
-/*   Updated: 2023/12/11 15:31:58 by justo            ###   ########.fr       */
+/*   Updated: 2023/12/12 15:26:45 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 
-//un buffer est necessaire pour pouvoir lire a repetition une certaine distance dans le fichier
-#define BUFFER_SIZE 1024
 
-//Jai besoin d'un efonction qui lit une ligne entiere :
-// eller renvoie 1 lorsqu'on est arrivé à la fin d'une ligne, 0 lorsque c'est la fin du fichier, -1 en cas d'erreur
-int read_line(fd, char *buffer, );
-
-
-//fction qui permet de compter
-int    counting(void)
+char	*get_next_line(int fd)
 {
-    static int  count;
-    
-    count = 0;
-    write(1, (count+48), 1);
-    count++;
-}
+	static char	buffer[300];
+	static int	read_result;
+	int			i;
+	char		*line;
 
-// Cette fonction va pouvoir lancer les autres fonction
-char    *get_next_line(int fd)
-{
-    
+	i = 0;
+	if (buffer[i] != '\0')
+	{
+		line = ft_strjoin(line, buffer);
+	}
+	read_result = read(fd, buffer, 300);
+	if (read_result == -1 || read_result == 0)
+		return (NULL);
+	while (i <= 300)
+	{
+		if (buffer[i] == '\n')
+		{
+			line = ft_strjoin(line, buffer);
+			ft_memmove(buffer, buffer);
+			return (line);
+		}
+		i++;
+	}
+	get_next_line(fd);
 }
