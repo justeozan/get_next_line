@@ -6,7 +6,7 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:41 by justo             #+#    #+#             */
-/*   Updated: 2023/12/14 13:53:54 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/14 18:02:30 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,43 @@
 
 #include <stdio.h>
 
-char	*str_init(char *s)
-{
 
-	s = (char *)malloc(sizeof(char) * 1);
-	if (!s)
-		return (NULL);
-	s[0] = '\0';
-	return (s);
+char	*extract_the_line(char *line, char *buffer, int	len)
+{
+	char	*new_line;
+	int		i;
+	int		j;
+	
+	new_line = malloc(sizeof(char) * (len + 1 + ft_strlen_gnl(line)));
+	if (!new_line)
+		return (free(line), NULL);
+	i = -1;
+	while (line[++i])
+		new_line[i] = line[i]; 
+	free(line);
+	j = 0;
+	while (j < len)
+	{
+		new_line[i] = buffer[j];
+		i++;
+		j++;
+	}
+	new_line[i] = '\0';
+	return (new_line);
+}
+
+
+
+int	there_is_a_line(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '\n')
+		i++;
+	if (str[i] == '\n')
+		return (i + 1);
+	return (0);
 }
 
 int	check_buffer(char *buffer)
@@ -41,21 +70,65 @@ int	check_buffer(char *buffer)
 	return (1);
 }
 
-char	*run(char *buffer, char *line)
-{
-	int	read_continue;
+// char	*run(char *buffer, char *line)
+// {
+// 	int	read_continue;
 
-	read_continue = 1;
-	while (read_continue == 1)
+// 	read_continue = 1;
+// 	while (read_continue == 1)
+// 	{
+// 		// ft_strlcat_gnl(line, buffer, ft_strlen_gnl(line) + BUFFER_SIZE + 1);
+// 		if (check_buffer(buffer) < 1)
+// 			read_continue = 0;
+		
+// 		line = ft_strjoin_gnl(line, buffer);
+// 		buffer = ft_rebuffing(buffer);
+// 		// if (check_buffer(buffer) < 1)
+// 		// 	read_continue = 0;
+// 		// printf("step 11, read_continue = %d\n", read_continue);
+// 	}
+// 	printf("%s\n", line);
+// 	return (line);
+// }
+
+
+int	update_gnl(char *newbuffer, char *buffer, char **line)
+{
+	int	i;
+
+	i = 0;
+	while (buffer[i])
 	{
-		// ft_strlcat_gnl(line, buffer, ft_strlen_gnl(line) + BUFFER_SIZE + 1);
-		line = ft_strjoin_gnl(line, buffer);
-		if (check_buffer(buffer) < 1)
-			read_continue = 0;
-		printf("step 11, read_continue = %d\n", read_continue);
+		newbuffer[i] = buffer[i];
+		i++;
 	}
-	printf("%s\n", line);
-	return (line);
+	newbuffer[i] = '\0';
+	*line = extract_the_line(*line, newbuffer, ft_strlen_gnl(newbuffer));
+	if (!line)
+		return (-1);														//error when updating
+	return (1);																//gnl has been updated
+}
+
+
+char	*run_read(int fd, char *line, char *buffer)
+{
+	int	byte_read;
+
+	byte_read = 1;
+	while (byte_read > 0)
+	{
+		byte_read = read(fd, buffer, BUFFER_SIZE);
+		if (read(fd, buffer, BUFFER_SIZE) == -1)
+			break ;
+		line = extract_the_line(line, buffer, ft_strlen_gnl(buffer));
+		if (!line)
+			return (NULL);
+		if ((there_is_a_line(line) > 0 || byte_read == 0) && line[0] != 0)
+			return (line);
+	}
+	buffer[0] = '\0'; //oblige ?????
+	free(line);
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
@@ -65,19 +138,31 @@ char	*get_next_line(int fd)
 
 	line = NULL;
 	line = str_init(line);
-	if (line == NULL)
-	{
-		free(line);
+	if (!line)
 		return (NULL);
-	}
-	if (fd < 0 || read(fd, buffer, BUFFER_SIZE) <= 0)
-		return (NULL);
-	if (buffer == NULL)
-		return (NULL);
-	line = run(buffer, line);
-	printf("final step\n");
-	return (line);
+	if (fd < 0 || BUFFER_SIZE < 1 
+		|| update_gnl(buffer, &buffer[there_is_a_line(buffer)], &line) < 1)	//update the line and the buffer if needed.
+		return (free(line), NULL);
+	if (there_is_a_line(line) > 0)											// check if there's a line in 'line'.
+		return (line);														//if yes, return this line.
+	return (run_read(fd, line, buffer));									// if not, return the line we're gonna extract from the buffer
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//--------------------------------------------
+
+
 
 #include <stdio.h>
 #include <fcntl.h>

@@ -6,7 +6,7 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:43 by justo             #+#    #+#             */
-/*   Updated: 2023/12/14 13:52:21 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/14 17:57:04 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	ft_strlen_gnl(char *str)
 	i = 0;
 	while (str[i] && str[i] != '\n')
 		i++;
+	if (str[i] == '\n')
+		i++;
 	return (i);
 }
 
@@ -97,4 +99,38 @@ char	*ft_strjoin_gnl(char *line, char *buffer)
 	// }
 	// str[i] = '\0';
 	// return (str);
+}
+
+// char	*ft_rebuffing(char *buffer)
+// {
+// 	char	*new_buffer;
+// 	int		i;
+// 	int		j;
+
+// 	new_buffer = NULL;
+// 	str_init(new_buffer);
+// 	if (new_buffer == NULL)
+// 	{
+// 		free(new_buffer);
+// 		return (NULL);
+// 	}
+// 	i = ft_strlen_gnl(buffer) + 1;
+// 	j = 0;
+// 	while (buffer[i] != '\n' && buffer[i] != '\0')
+// 	{
+// 		new_buffer[j] = buffer[i];
+// 		i++;
+// 		j++;
+// 	}
+// 	if ()
+	
+// }
+
+char	*str_init(char *s)
+{
+	s = (char *)malloc(sizeof(char) * 1);
+	if (!s)
+		return (NULL);
+	s[0] = '\0';
+	return (s);
 }
