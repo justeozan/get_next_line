@@ -6,7 +6,7 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:41 by justo             #+#    #+#             */
-/*   Updated: 2023/12/13 17:16:25 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/14 13:53:54 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,39 +36,9 @@ int	check_buffer(char *buffer)
 			return (-1);
 		if (buffer[i] == '\n')
 			return (0);
-	}
-	return (1);
-}
-
-size_t	ft_strlcat_gnl(char *dst, char *src, size_t size)
-{
-	size_t	dst_len;
-	size_t	src_len;
-	size_t	i;
-
-	dst_len = 0;
-	src_len = 0;
-	i = 0;
-	printf("step 5\n");
-	while (dst[dst_len] != '\0' && dst_len < size)
-		dst_len++;
-	printf("step 6\n");
-	printf("src[src_len] = %c\n", src[src_len]);
-	while (src[src_len] != '\n' || src[src_len] != '\0')
-	{
-		printf("src[src_len] = %c\n", src[src_len]);
-		src_len++;
-	}
-	printf("step 7\n");
-	if (size == 0 || dst_len == size)
-		return (size + src_len);
-	while ((src[i] != '\n' || src[i] != '\0') && dst_len + i < size - 1)
-	{
-		dst[dst_len + i] = src[i];
 		i++;
 	}
-	dst[dst_len + i] = '\0';
-	return (dst_len + src_len);
+	return (1);
 }
 
 char	*run(char *buffer, char *line)
@@ -76,13 +46,13 @@ char	*run(char *buffer, char *line)
 	int	read_continue;
 
 	read_continue = 1;
-	printf("step 3\n");
 	while (read_continue == 1)
 	{
-		printf("step 4\n");
-		ft_strlcat_gnl(line, buffer, ft_strlen(line) + BUFFER_SIZE + 1);
+		// ft_strlcat_gnl(line, buffer, ft_strlen_gnl(line) + BUFFER_SIZE + 1);
+		line = ft_strjoin_gnl(line, buffer);
 		if (check_buffer(buffer) < 1)
 			read_continue = 0;
+		printf("step 11, read_continue = %d\n", read_continue);
 	}
 	printf("%s\n", line);
 	return (line);
@@ -93,7 +63,6 @@ char	*get_next_line(int fd)
 	static char	buffer[BUFFER_SIZE + 1];
 	char		*line;
 
-	printf("step 0\n");
 	line = NULL;
 	line = str_init(line);
 	if (line == NULL)
@@ -101,12 +70,10 @@ char	*get_next_line(int fd)
 		free(line);
 		return (NULL);
 	}
-	printf("step 1\n");
 	if (fd < 0 || read(fd, buffer, BUFFER_SIZE) <= 0)
 		return (NULL);
 	if (buffer == NULL)
 		return (NULL);
-	printf("step 2\n");
 	line = run(buffer, line);
 	printf("final step\n");
 	return (line);

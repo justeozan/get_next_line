@@ -6,84 +6,95 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:43 by justo             #+#    #+#             */
-/*   Updated: 2023/12/13 16:40:09 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/14 13:52:21 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// char	*ft_slice_gnl(int flag, char *buffer, int size)
-// {
-// 	int		i;
-// 	char	*new_str;
+#include <stdio.h> // ATTENTION !!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
 
-// 	i = 0;
-// 	new_str = malloc
-// }
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	len;
 
-// void	*ft_memmove(void *dest, const void *src, size_t n)
-// {
-// 	unsigned char	*d;
-// 	unsigned char	*s;
+	len = 0;
+	while (src[len])
+		len++;
+	if (size == 0)
+		return (len);
+	i = 0;
+	while (src[i] != '\0' && i < size - 1)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (len);
+}
 
-// 	d = (unsigned char *)dest;
-// 	s = (unsigned char *)src;	
-// 	if (dest == 0 && src == 0 && n > 0)
-// 		return (0);
-// 	if (dest < src)
-// 		ft_memcpy(d, s, n);
-// 	else
-// 	{
-// 		while (n > 0)
-// 		{
-// 			d[n - 1] = s[n - 1];
-// 			n--;
-// 		}
-// 	}
-// 	return (dest);
-// }
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	size_t	dl;
+	size_t	sl;
+	size_t	i;
 
-int	ft_strlen(char *str)
+	dl = 0;
+	sl = 0;
+	i = 0;
+	while (dst[dl] != '\0' && dl < size)
+		dl++;
+	while (src[sl] != '\0')
+		sl++;
+	if (size == 0 || dl == size)
+		return (size + sl);
+	while (src[i] != '\0' && dl + i < size - 1)
+	{
+		dst[dl + i] = src[i];
+		i++;
+	}
+	dst[dl + i] = '\0';
+	return (dl + sl);
+}
+
+int	ft_strlen_gnl(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (str[i])
+	while (str[i] && str[i] != '\n')
 		i++;
 	return (i);
 }
 
-// char	*ft_create_str(char *line, char *buffer)
-// {
-// 	char	*new_str;
-// 	int		l;
+char	*ft_strjoin_gnl(char *line, char *buffer)
+{
+	char	*str;
+	int		l;
 
-// 	l = ft_strlen(line);
-// 	l += ft_strlen(buffer);
-// 	new_str = (char *)malloc(sizeof(char) * (l + 1));
-// 	if (!new_str)
-// 		return (0);
-// 	return (new_str);
-// }
-
-// char	*ft_strjoin_gnl(char *line, char *buffer)
-// {
-// 	char	*str;
-// 	int		i;
-
-// 	str = ft_create_str(line, buffer);
-
-// 	i = 0;
-// 	while (line[i])
-// 	{
-// 		str[i] = line[i];
-// 		i++;
-// 	}
-// 	while (buffer[i])
-// 	{
-// 		str[i] = buffer[i];
-// 		i++;
-// 	}
-// 	str[i] = '\0';
-// 	return (str);
-// }
+	if (!line || !buffer)
+		return (NULL);
+	l = ft_strlen_gnl(line) + ft_strlen_gnl(buffer);
+	printf("l = %d", l);
+	str = (char *)malloc((l + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, line, ft_strlen_gnl(line) + 1);
+	ft_strlcat(str, buffer, l + 1);
+	return (str);
+	
+	// i = 0;
+	// while (line[i])
+	// {
+	// 	str[i] = line[i];
+	// 	i++;
+	// }
+	// while (buffer[i])
+	// {
+	// 	str[i] = buffer[i];
+	// 	i++;
+	// }
+	// str[i] = '\0';
+	// return (str);
+}
