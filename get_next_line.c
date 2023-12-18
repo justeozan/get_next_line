@@ -12,10 +12,7 @@
 
 #include "get_next_line.h"
 
-#include <stdio.h>
-
-
-char	*extract_the_line(char *line, char *buffer, int	len)
+char	*extract_the_line(char *line, char *buffer, int	len) // OK
 {
 	char	*new_line;
 	int		i;
@@ -36,12 +33,11 @@ char	*extract_the_line(char *line, char *buffer, int	len)
 		j++;
 	}
 	new_line[i] = '\0';
+	
 	return (new_line);
 }
 
-
-
-int	there_is_a_line(char *str)
+int	there_is_a_line(char *str) //OK
 {
 	int	i;
 
@@ -53,22 +49,22 @@ int	there_is_a_line(char *str)
 	return (0);
 }
 
-int	check_buffer(char *buffer)
-{
-	int	i;
+// int	check_buffer(char *buffer)
+// {
+// 	int	i;
 
-	i = 0;
+// 	i = 0;
 
-	while (i <= BUFFER_SIZE)
-	{
-		if (buffer[i] == '\0')
-			return (-1);
-		if (buffer[i] == '\n')
-			return (0);
-		i++;
-	}
-	return (1);
-}
+// 	while (i <= BUFFER_SIZE)
+// 	{
+// 		if (buffer[i] == '\0')
+// 			return (-1);
+// 		if (buffer[i] == '\n')
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
 
 // char	*run(char *buffer, char *line)
 // {
@@ -118,15 +114,16 @@ char	*run_read(int fd, char *line, char *buffer)
 	while (byte_read > 0)
 	{
 		byte_read = read(fd, buffer, BUFFER_SIZE);
-		if (read(fd, buffer, BUFFER_SIZE) == -1)
+		if (byte_read == -1)
 			break ;
+		buffer[byte_read] = 0;
 		line = extract_the_line(line, buffer, ft_strlen_gnl(buffer));
 		if (!line)
 			return (NULL);
 		if ((there_is_a_line(line) > 0 || byte_read == 0) && line[0] != 0)
 			return (line);
 	}
-	buffer[0] = '\0'; //oblige ?????
+	buffer[0] = '\0';
 	free(line);
 	return (NULL);
 }
@@ -141,18 +138,12 @@ char	*get_next_line(int fd)
 	if (!line)
 		return (NULL);
 	if (fd < 0 || BUFFER_SIZE < 1 
-		|| update_gnl(buffer, &buffer[there_is_a_line(buffer)], &line) < 1)	//update the line and the buffer if needed.
+		|| update_gnl(buffer, &buffer[there_is_a_line(buffer)], &line) < 0)	//update the line and the buffer if needed.
 		return (free(line), NULL);
 	if (there_is_a_line(line) > 0)											// check if there's a line in 'line'.
 		return (line);														//if yes, return this line.
 	return (run_read(fd, line, buffer));									// if not, return the line we're gonna extract from the buffer
 }
-
-
-
-
-
-
 
 
 
@@ -167,23 +158,21 @@ char	*get_next_line(int fd)
 #include <stdio.h>
 #include <fcntl.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
 	char	*line;
 	int		fd;
 
 	if (argc != 2)
 		return 1;
-	// printf("%s\n", argv[1]);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		return 1;
-	// while ((line = get_next_line(fd)) != NULL)
-	// {
-	// 	printf("line = %s", line);
-	// 	free(line);
-	// }
-	line = get_next_line(fd);
-	printf("\nline = %s", line);
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("line = %s", line);
+		free(line);
+	}
+	close(fd);
 	return 0;
 }
