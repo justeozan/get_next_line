@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:41 by justo             #+#    #+#             */
-/*   Updated: 2023/12/21 13:03:19 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/21 14:07:46 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*extract_the_line(char *line, char *buffer, int len)
 {
@@ -89,20 +89,26 @@ char	*run_read(int fd, char *line, char *buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE + 1];
+	static t_id	buffer_memory[MAX_ID];
 	char		*line;
+	char		*buffer;
 
+	if (fd < 0 || MAX_ID < 1 || BUFFER_SIZE < 1)
+		return (NULL);
 	line = NULL;
 	line = str_init(line);
 	if (!line)
 		return (NULL);
-	if (fd < 0 || BUFFER_SIZE < 1
-		|| update_gnl(buffer, &buffer[there_is_a_line(buffer)], &line) < 0)
+	buffer = buffer_init(fd, buffer_memory);
+	if (!buffer)
+		return (NULL);
+	if (update_gnl(buffer, &buffer[there_is_a_line(buffer)], &line) < 0)
 		return (free(line), NULL);
 	if (there_is_a_line(line) > 0)
 		return (line);
 	return (run_read(fd, line, buffer));
 }
+
 // #include <stdio.h>
 // #include <fcntl.h>
 
