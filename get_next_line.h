@@ -6,7 +6,7 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:44 by justo             #+#    #+#             */
-/*   Updated: 2023/12/14 13:52:35 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/21 11:27:54 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,12 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-//in gnl
 char	*extract_the_line(char *line, char *buffer, int	len);
 int		there_is_a_line(char *str);
 int		update_gnl(char *newbuffer, char *buffer, char **line);
 char	*run_read(int fd, char *line, char *buffer);
 char	*get_next_line(int fd);
-
-//in gnl_utils
 int		ft_strlen_gnl(char *str);
 char	*str_init(char *s);
-
 
 #endif

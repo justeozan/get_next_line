@@ -3,8 +3,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-
-
 char	*str_init(char *line)
 {
 	line = (char *)malloc(sizeof(char) * 1);
