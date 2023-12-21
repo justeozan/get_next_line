@@ -6,7 +6,7 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:22:44 by justo             #+#    #+#             */
-/*   Updated: 2023/12/21 14:15:43 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/21 14:20:28 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ typedef struct s_id
 }	t_id;
 
 char	*extract_the_line(char *line, char *buffer, int len);
-int		there_is_a_line(char *str);
+size_t	there_is_a_line(char *str);
 int		update_gnl(char *newbuffer, char *buffer, char **line);
 char	*run_read(int fd, char *line, char *buffer);
 char	*get_next_line(int fd);
-int		ft_strlen_gnl(char *str);
+size_t	ft_strlen_gnl(char *str);
 char	*str_init(char *s);
 char	*buffer_init(int id, t_id *buffer_memory);
 

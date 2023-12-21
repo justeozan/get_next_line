@@ -6,15 +6,15 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:43 by justo             #+#    #+#             */
-/*   Updated: 2023/12/21 11:30:05 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/21 14:19:22 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen_gnl(char *str)
+size_t	ft_strlen_gnl(char *str)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (str[i] && str[i] != '\n')

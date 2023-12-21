@@ -6,7 +6,7 @@
 /*   By: ozasahin <ozasahin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 14:23:41 by justo             #+#    #+#             */
-/*   Updated: 2023/12/21 13:03:19 by ozasahin         ###   ########.fr       */
+/*   Updated: 2023/12/21 14:20:01 by ozasahin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	*extract_the_line(char *line, char *buffer, int len)
 	return (new_line);
 }
 
-int	there_is_a_line(char *str)
+size_t	there_is_a_line(char *str)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (str[i] && str[i] != '\n')
